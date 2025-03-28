@@ -1,10 +1,8 @@
 package com.elegancesalon.crm.payload.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-
 import java.util.Set;
+
+import jakarta.validation.constraints.*;
 
 public class SignupRequest {
     @NotBlank
@@ -16,22 +14,22 @@ public class SignupRequest {
     @Email
     private String email;
 
+    private Set<String> roles;
+
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
-
+    
     @NotBlank
     @Size(max = 50)
     private String firstName;
-
+    
     @NotBlank
     @Size(max = 50)
     private String lastName;
-
+    
     @Size(max = 15)
     private String phone;
-
-    private Set<String> roles;
 
     public String getUsername() {
         return username;
@@ -57,6 +55,14 @@ public class SignupRequest {
         this.password = password;
     }
 
+    public Set<String> getRoles() {
+        return this.roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
+    }
+    
     public String getFirstName() {
         return firstName;
     }
@@ -79,13 +85,5 @@ public class SignupRequest {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public Set<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
     }
 }
