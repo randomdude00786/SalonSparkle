@@ -1,4 +1,9 @@
 import { users, type User, type InsertUser, type Appointment, type InsertAppointment } from "@shared/schema";
+import session from "express-session";
+import createMemoryStore from "memorystore";
+
+// Create the proper MemoryStore type
+const MemoryStore = createMemoryStore(session);
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -6,6 +11,7 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
   createAppointment(appointment: InsertAppointment): Promise<Appointment>;
   getAppointments(): Promise<Appointment[]>;
+  sessionStore: session.Store;
 }
 
 export class MemStorage implements IStorage {
@@ -13,12 +19,17 @@ export class MemStorage implements IStorage {
   private appointments: Map<number, Appointment>;
   private userCurrentId: number;
   private appointmentCurrentId: number;
+  public sessionStore: session.Store;
 
   constructor() {
     this.users = new Map();
     this.appointments = new Map();
     this.userCurrentId = 1;
     this.appointmentCurrentId = 1;
+    
+    this.sessionStore = new MemoryStore({
+      checkPeriod: 86400000, // prune expired entries every 24h
+    });
   }
 
   async getUser(id: number): Promise<User | undefined> {

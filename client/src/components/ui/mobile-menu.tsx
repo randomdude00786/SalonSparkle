@@ -1,4 +1,8 @@
 import React from 'react';
+import { Link, useLocation } from "wouter";
+import { useAuth } from "@/hooks/use-auth";
+import { Button } from "@/components/ui/button";
+import { Loader2, User } from "lucide-react";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -7,6 +11,18 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ isOpen, onClose, onLinkClick }: MobileMenuProps) {
+  const { user, logoutMutation } = useAuth();
+  const [, navigate] = useLocation();
+  
+  const handleLogout = () => {
+    logoutMutation.mutate();
+    onClose(); // Close the mobile menu after logout
+  };
+  
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    onClose(); // Close the mobile menu after navigation
+  };
   return (
     <div 
       className={`fixed top-0 left-0 h-full w-64 bg-[#1A365D] z-50 p-6 transition-transform duration-300 ${
@@ -83,6 +99,49 @@ export default function MobileMenu({ isOpen, onClose, onLinkClick }: MobileMenuP
             Contact
           </a>
         </li>
+        {/* Auth Links */}
+        {user ? (
+          <>
+            <li>
+              <button 
+                className="text-white hover:text-[#D4AF37] transition-colors duration-300 block"
+                onClick={() => handleNavigation('/dashboard')}
+              >
+                <div className="flex items-center">
+                  <User className="h-4 w-4 mr-1" />
+                  <span>Dashboard</span>
+                </div>
+              </button>
+            </li>
+            <li>
+              <button 
+                className="text-white hover:text-[#D4AF37] transition-colors duration-300 block"
+                onClick={handleLogout}
+                disabled={logoutMutation.isPending}
+              >
+                <div className="flex items-center">
+                  {logoutMutation.isPending ? (
+                    <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                  ) : null}
+                  <span>Logout</span>
+                </div>
+              </button>
+            </li>
+          </>
+        ) : (
+          <li>
+            <button 
+              className="text-white hover:text-[#D4AF37] transition-colors duration-300 block"
+              onClick={() => handleNavigation('/auth')}
+            >
+              <div className="flex items-center">
+                <User className="h-4 w-4 mr-1" />
+                <span>Login / Register</span>
+              </div>
+            </button>
+          </li>
+        )}
+        
         <li className="pt-4">
           <a 
             href="#appointment" 

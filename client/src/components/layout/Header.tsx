@@ -1,12 +1,22 @@
 import React, { useState } from "react";
+import { Link, useLocation } from "wouter";
 import MobileMenu from "@/components/ui/mobile-menu";
+import { useAuth } from "@/hooks/use-auth";
+import { Button } from "@/components/ui/button";
+import { Loader2, User } from "lucide-react";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, logoutMutation } = useAuth();
+  const [, navigate] = useLocation();
   
   const scrollToSection = (id: string) => (e: React.MouseEvent) => {
     e.preventDefault();
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+  
+  const handleLogout = () => {
+    logoutMutation.mutate();
   };
 
   return (
@@ -70,14 +80,44 @@ export default function Header() {
           </ul>
         </nav>
         
-        {/* Booking Button */}
-        <a 
-          href="#appointment" 
-          className="hidden md:block bg-[#D4AF37] hover:bg-opacity-90 text-[#1A365D] font-medium py-2 px-6 rounded-full transition-all duration-300"
-          onClick={scrollToSection('appointment')}
-        >
-          Book Now
-        </a>
+        {/* Auth Buttons or User Menu */}
+        <div className="hidden md:flex items-center space-x-4">
+          {user ? (
+            <div className="flex items-center space-x-4">
+              <Link href="/dashboard" className="text-white hover:text-[#D4AF37] flex items-center">
+                <User className="h-4 w-4 mr-1" />
+                <span>Dashboard</span>
+              </Link>
+              <Button 
+                variant="ghost" 
+                className="text-white hover:text-[#D4AF37]"
+                onClick={handleLogout}
+                disabled={logoutMutation.isPending}
+              >
+                {logoutMutation.isPending ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : null}
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <Link 
+              href="/auth" 
+              className="text-white hover:text-[#D4AF37] flex items-center"
+            >
+              <User className="h-4 w-4 mr-1" />
+              <span>Login / Register</span>
+            </Link>
+          )}
+          
+          <a 
+            href="#appointment" 
+            className="bg-[#D4AF37] hover:bg-opacity-90 text-[#1A365D] font-medium py-2 px-6 rounded-full transition-all duration-300"
+            onClick={scrollToSection('appointment')}
+          >
+            Book Now
+          </a>
+        </div>
         
         {/* Mobile Menu Button */}
         <button 
