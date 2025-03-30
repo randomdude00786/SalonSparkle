@@ -4,11 +4,13 @@
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/payload/response/MessageResponse.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/payload/response/JwtResponse.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/controllers/AuthController.java
+/home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/model/LoyaltyPoints.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/security/services/UserDetailsServiceImpl.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/security/services/UserDetailsImpl.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/model/User.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/repositories/UserRepository.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/security/jwt/JwtUtils.java
+/home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/service/LoyaltyService.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/models/Role.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/SalonApplication.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/models/User.java
@@ -26,6 +28,7 @@
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/repositories/AppointmentRepository.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/security/WebSecurityConfig.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/models/Appointment.java
+/home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/model/ServicePackage.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/security/jwt/AuthTokenFilter.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/CrmApplication.java
 /home/runner/workspace/backend/src/main/java/com/elegancesalon/crm/models/responses/MessageResponse.java
