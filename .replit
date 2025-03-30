@@ -15,7 +15,7 @@ localPort = 5000
 externalPort = 80
 
 [workflows]
-runButton = "Project"
+runButton = "Run Both Backends"
 
 [[workflows.workflow]]
 name = "Project"
@@ -45,6 +45,19 @@ waitForPort = 5000
 name = "Start Java Backend"
 author = 40909992
 mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd backend && mvn spring-boot:run"
+
+[[workflows.workflow]]
+name = "Run Both Backends"
+author = 40909992
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
