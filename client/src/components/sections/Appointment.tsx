@@ -75,7 +75,11 @@ export default function Appointment() {
   });
 
   function onSubmit(values: AppointmentFormValues) {
-    mutation.mutate(values);
+    const formattedValues = {
+      ...values,
+      dateTime: `${values.date}T${values.time}`,
+    };
+    mutation.mutate(formattedValues);
   }
 
   return (

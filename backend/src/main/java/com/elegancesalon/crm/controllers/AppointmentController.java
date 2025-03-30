@@ -41,10 +41,10 @@ public class AppointmentController {
         User user = userRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new RuntimeException("Error: User is not found."));
         
+        LocalDateTime dateTime = LocalDateTime.parse(appointmentRequest.getDate() + "T" + appointmentRequest.getTime());
         Appointment appointment = new Appointment(
-                user, 
-                appointmentRequest.getDate(),
-                appointmentRequest.getTime(),
+                user,
+                dateTime,
                 appointmentRequest.getService(),
                 appointmentRequest.getStylist(),
                 appointmentRequest.getNotes()
