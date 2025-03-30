@@ -5,8 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "appointments")
@@ -20,7 +21,7 @@ public class Appointment {
     private User user;
 
     @NotNull
-    private LocalDate date;
+    private LocalDateTime date;
 
     @NotNull
     private LocalTime time;
@@ -40,10 +41,17 @@ public class Appointment {
     @Column(length = 20)
     private AppointmentStatus status = AppointmentStatus.PENDING;
 
+    private Integer duration;
+    private String beforePhoto;
+    private String afterPhoto;
+
+    @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
+    private Set<ProductRecommendation> productRecommendations;
+
     public Appointment() {
     }
 
-    public Appointment(User user, LocalDate date, LocalTime time, String service, String stylist, String notes) {
+    public Appointment(User user, LocalDateTime date, LocalTime time, String service, String stylist, String notes) {
         this.user = user;
         this.date = date;
         this.time = time;
@@ -68,11 +76,11 @@ public class Appointment {
         this.user = user;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -114,5 +122,37 @@ public class Appointment {
 
     public void setStatus(AppointmentStatus status) {
         this.status = status;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public String getBeforePhoto() {
+        return beforePhoto;
+    }
+
+    public void setBeforePhoto(String beforePhoto) {
+        this.beforePhoto = beforePhoto;
+    }
+
+    public String getAfterPhoto() {
+        return afterPhoto;
+    }
+
+    public void setAfterPhoto(String afterPhoto) {
+        this.afterPhoto = afterPhoto;
+    }
+
+    public Set<ProductRecommendation> getProductRecommendations() {
+        return productRecommendations;
+    }
+
+    public void setProductRecommendations(Set<ProductRecommendation> productRecommendations) {
+        this.productRecommendations = productRecommendations;
     }
 }
