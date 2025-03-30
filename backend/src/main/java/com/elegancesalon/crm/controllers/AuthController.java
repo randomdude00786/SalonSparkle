@@ -1,12 +1,17 @@
 package com.elegancesalon.crm.controllers;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.elegancesalon.crm.models.ERole;
+import com.elegancesalon.crm.models.Role;
+import com.elegancesalon.crm.models.User;
+import com.elegancesalon.crm.models.requests.LoginRequest;
+import com.elegancesalon.crm.models.requests.SignupRequest;
+import com.elegancesalon.crm.models.responses.JwtResponse;
+import com.elegancesalon.crm.models.responses.MessageResponse;
+import com.elegancesalon.crm.repository.RoleRepository;
+import com.elegancesalon.crm.repository.UserRepository;
+import com.elegancesalon.crm.security.jwt.JwtUtils;
+import com.elegancesalon.crm.security.services.UserDetailsImpl;
 import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,23 +19,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.elegancesalon.crm.model.ERole;
-import com.elegancesalon.crm.model.Role;
-import com.elegancesalon.crm.model.User;
-import com.elegancesalon.crm.payload.request.LoginRequest;
-import com.elegancesalon.crm.payload.request.SignupRequest;
-import com.elegancesalon.crm.payload.response.JwtResponse;
-import com.elegancesalon.crm.payload.response.MessageResponse;
-import com.elegancesalon.crm.repository.RoleRepository;
-import com.elegancesalon.crm.repository.UserRepository;
-import com.elegancesalon.crm.security.jwt.JwtUtils;
-import com.elegancesalon.crm.security.services.UserDetailsImpl;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -53,7 +47,6 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -68,10 +61,8 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
+                userDetails.getName(),
                 userDetails.getEmail(),
-                userDetails.getFirstName(),
-                userDetails.getLastName(),
-                userDetails.getPhone(),
                 roles));
     }
 
@@ -91,13 +82,11 @@ public class AuthController {
 
         // Create new user's account
         User user = new User(signUpRequest.getUsername(),
+                signUpRequest.getName(),
                 signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()),
-                signUpRequest.getFirstName(),
-                signUpRequest.getLastName(),
-                signUpRequest.getPhone());
+                encoder.encode(signUpRequest.getPassword()));
 
-        Set<String> strRoles = signUpRequest.getRoles();
+        Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
@@ -112,15 +101,10 @@ public class AuthController {
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
                         break;
-                    case "stylist":
-                        Role stylistRole = roleRepository.findByName(ERole.ROLE_STYLIST)
+                    case "mod":
+                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(stylistRole);
-                        break;
-                    case "receptionist":
-                        Role receptionistRole = roleRepository.findByName(ERole.ROLE_RECEPTIONIST)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(receptionistRole);
+                        roles.add(modRole);
                         break;
                     default:
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)

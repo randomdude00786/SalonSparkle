@@ -1,14 +1,13 @@
 package com.elegancesalon.crm.security.services;
 
+import com.elegancesalon.crm.models.User;
+import com.elegancesalon.crm.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.elegancesalon.crm.model.User;
-import com.elegancesalon.crm.repository.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

@@ -1,4 +1,4 @@
-package com.elegancesalon.crm.repository;
+package com.elegancesalon.crm.repositories;
 
 import com.elegancesalon.crm.models.Appointment;
 import com.elegancesalon.crm.models.User;
@@ -13,4 +13,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     List<Appointment> findByUser(User user);
     List<Appointment> findByDateTimeBetween(LocalDateTime start, LocalDateTime end);
     List<Appointment> findByUserAndDateTimeBetween(User user, LocalDateTime start, LocalDateTime end);
+    List<Appointment> findByConfirmedAndDateTimeBefore(boolean confirmed, LocalDateTime dateTime);
 }

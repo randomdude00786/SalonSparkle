@@ -1,46 +1,36 @@
 package com.elegancesalon.crm.security.services;
 
+import com.elegancesalon.crm.models.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import com.elegancesalon.crm.model.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-
     private String username;
-
+    private String name;
     private String email;
     
-    private String firstName;
-    
-    private String lastName;
-    
-    private String phone;
-
     @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String email, String password, String firstName, String lastName, String phone,
-            Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(Long id, String username, String name, String email, String password,
+                           Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
+        this.name = name;
         this.email = email;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
         this.authorities = authorities;
     }
 
@@ -50,13 +40,11 @@ public class UserDetailsImpl implements UserDetails {
                 .collect(Collectors.toList());
 
         return new UserDetailsImpl(
-                user.getId(), 
+                user.getId(),
                 user.getUsername(),
+                user.getName(),
                 user.getEmail(),
                 user.getPassword(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getPhone(),
                 authorities);
     }
 
@@ -73,16 +61,8 @@ public class UserDetailsImpl implements UserDetails {
         return email;
     }
     
-    public String getFirstName() {
-        return firstName;
-    }
-    
-    public String getLastName() {
-        return lastName;
-    }
-    
-    public String getPhone() {
-        return phone;
+    public String getName() {
+        return name;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.elegancesalon.crm.repository;
+package com.elegancesalon.crm.repositories;
 
 import com.elegancesalon.crm.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
